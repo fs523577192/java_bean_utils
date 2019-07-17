@@ -38,6 +38,9 @@ class BeanFieldSetter<T>(
 
     private val trySameNameSetter: Boolean,
 
+    /**
+     * Whether try to access the field by the API [Field#set(Object, Object)]
+     */
     private val tryFieldSetter: Boolean
 ) {
     constructor(clazz: Class<T>, field: Field, trySameNameGetter: Boolean):
@@ -112,5 +115,26 @@ class BeanFieldSetter<T>(
         } else {
             field.set(bean, value)
         }
+    }
+
+    override fun equals(other: Any?): Boolean {
+        return if (other !is BeanFieldSetter<*>)
+            false
+        else
+            other.clazz == this.clazz && other.field == this.field &&
+                    other.trySameNameSetter == this.trySameNameSetter && other.tryFieldSetter == this.tryFieldSetter
+    }
+
+    override fun hashCode(): Int {
+        return this.clazz.hashCode() + this.field.hashCode() * 31 +
+                if (this.trySameNameSetter) 37 else 0 +
+                        if (this.tryFieldSetter) 41 else 0
+    }
+
+    override fun toString(): String {
+        return "BeanFieldSetter {\"class\":\"" + this.clazz.name +
+                "\",\"field\":\"" + this.field.declaringClass.name + '#' + this.field.name +
+                "\",\"trySameNameSetter\":" + this.trySameNameSetter +
+                "\",\"tryFieldSetter\":" + this.tryFieldSetter + '}'
     }
 }

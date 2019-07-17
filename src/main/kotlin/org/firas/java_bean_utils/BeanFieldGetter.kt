@@ -40,6 +40,9 @@ class BeanFieldGetter<T>(
 
     private val trySameNameGetter: Boolean,
 
+    /**
+     * Whether try to access the field by the API [Field#get(Object)]
+     */
     private val tryFieldGetter: Boolean
 ) {
     constructor(clazz: Class<T>, field: Field, trySameNameGetter: Boolean):
@@ -114,5 +117,26 @@ class BeanFieldGetter<T>(
     fun getValue(bean: T): Any? {
         val getter = this.getter
         return if (null != getter) getter.invoke(bean) else this.field.get(bean)
+    }
+
+    override fun equals(other: Any?): Boolean {
+        return if (other !is BeanFieldGetter<*>)
+            false
+        else
+            other.clazz == this.clazz && other.field == this.field &&
+                    other.trySameNameGetter == this.trySameNameGetter && other.tryFieldGetter == this.tryFieldGetter
+    }
+
+    override fun hashCode(): Int {
+        return this.clazz.hashCode() + this.field.hashCode() * 31 +
+                if (this.trySameNameGetter) 37 else 0 +
+                if (this.tryFieldGetter) 41 else 0
+    }
+
+    override fun toString(): String {
+        return "BeanFieldGetter {\"class\":\"" + this.clazz.name +
+                "\",\"field\":\"" + this.field.declaringClass.name + '#' + this.field.name +
+                "\",\"trySameNameGetter\":" + this.trySameNameGetter +
+                "\",\"tryFieldGetter\":" + this.tryFieldGetter + '}'
     }
 }
