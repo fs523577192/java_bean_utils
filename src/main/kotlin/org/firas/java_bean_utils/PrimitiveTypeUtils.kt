@@ -4,7 +4,7 @@ package org.firas.java_bean_utils
  *
  * @author Wu Yuping
  */
-internal fun isPrimitiveType(clazz: Class<*>): Boolean {
+fun isPrimitiveType(clazz: Class<*>): Boolean {
     return when (clazz) {
         Int::class.javaPrimitiveType,
         Char::class.javaPrimitiveType,
@@ -18,7 +18,7 @@ internal fun isPrimitiveType(clazz: Class<*>): Boolean {
     }
 }
 
-internal fun getObjectType(clazz: Class<*>): Class<*> {
+fun getObjectType(clazz: Class<*>): Class<*> {
     return when (clazz) {
         Int::class.javaPrimitiveType -> Int::class.javaObjectType
         Char::class.javaPrimitiveType -> Char::class.javaObjectType
@@ -31,7 +31,7 @@ internal fun getObjectType(clazz: Class<*>): Class<*> {
     }
 }
 
-internal fun getPrimitiveType(clazz: Class<*>): Class<*>? {
+fun getPrimitiveType(clazz: Class<*>): Class<*>? {
     return when (clazz) {
         Int::class.javaObjectType -> Int::class.javaPrimitiveType
         Char::class.javaObjectType -> Char::class.javaPrimitiveType

@@ -2,6 +2,7 @@ package org.firas.java_bean_utils
 
 import java.lang.reflect.Field
 import java.lang.reflect.Method
+import java.lang.reflect.Modifier
 
 /**
  * Set the value of a field in an object by using Java reflection API.
@@ -53,6 +54,10 @@ class BeanFieldSetter<T>(
     private var setter: Method? = null
 
     init {
+        if (Modifier.isFinal(this.field.modifiers)) {
+            throw IllegalArgumentException(this.field.declaringClass.name +
+                    '.' + this.field.name + " is final and cannot be modified")
+        }
         if (!this.field.declaringClass.isAssignableFrom(this.clazz)) {
             throw IllegalArgumentException(this.field.declaringClass.name +
                     " is not assignable from " + this.clazz.name)

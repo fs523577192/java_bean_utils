@@ -1,5 +1,6 @@
 package org.firas.java_bean_utils;
 
+import org.junit.Assert;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -90,6 +91,8 @@ public class BeanFieldSetterTests {
         }
 
         public String string4;
+
+        public final String string5 = "string5";
 
         // ----==== Double ====----
         public void setDouble3(double double3) {
@@ -288,6 +291,14 @@ public class BeanFieldSetterTests {
         string4Setter.setValue(bean, string4);
         BeanFieldGetter<Bean> string4Getter = new BeanFieldGetter<>(Bean.class, Bean.class.getDeclaredField("string4"));
         assertEquals(string4, string4Getter.getValue(bean));
+
+        try {
+            BeanFieldSetter<Bean> string5Setter = new BeanFieldSetter<>(Bean.class, Bean.class.getDeclaredField("string5"));
+            Assert.fail("No IllegalArgumentException when the field is final");
+        } catch (IllegalArgumentException ex) {
+        } catch (Exception ex) {
+            Assert.fail("No IllegalArgumentException when the field is final");
+        }
     }
 
     private RandomUtils random = new RandomUtils();
